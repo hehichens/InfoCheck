@@ -35,6 +35,7 @@ def imgSplit(img):
     
 
     ## step4: split region
+    pc.splitFace(img)
     for rect in regions:
         cropImg = pc.projMap(img, rect)
         # debug_show(cropImg)

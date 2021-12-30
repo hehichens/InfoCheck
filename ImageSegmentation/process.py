@@ -394,3 +394,25 @@ def CardCharCommonDeal(BinaryImg, horiBoundaryCoor):
 
     #showImg(BinaryImg, 'BinaryImgBinaryImg')
     return vertiBoundaryCoors, maxWidth
+
+
+def splitFace(img):
+    face_cascade = cv2.CascadeClassifier('./xml/haarcascade_frontalface_default.xml')
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    faces = face_cascade.detectMultiScale(gray, 1.1, 4)
+
+    maxi = 0
+    maxArea = 0
+    for i in range(len(faces)):
+        x, y, w, h = faces[i]
+        area = w*h
+        if area > maxArea:
+            maxi = i
+            maxArea = area
+    
+    x, y, w, h = faces[maxi]
+    # cv2.rectangle(img, (x, y), (x+w, y+h), (255, 0, 0), 2)
+    # debug_show(img)
+    cropImg = img[y:y+h, x:x+w]
+    # debug_show(cropImg)
+    cv2.imwrite("../temp_images/card_face.jpg", cropImg)
