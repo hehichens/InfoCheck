@@ -12,6 +12,8 @@ import process as pc
 
 def imgSplit(img):
     """
+    Input the image of ID card, spliting the image to face, id number, sex, nation, name, birthday and address, \
+        then saving these images to ../temp_images/*
     Params:
         img: an img opened by opencv
     Return:
@@ -21,25 +23,17 @@ def imgSplit(img):
     ## step1: bgr to gray
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
-
     ## step2: preprocess
     dilation = pc.preprocess(gray) ##==>OK!<==
-   
 
     ## step3: find text region
     regions = pc.findTextRegion(dilation)
 
-    """debug"""
-    # contour = pc.addContours(img, regions)
-    # debug_show(contour)
-    
-
     ## step4: split region
-    pc.splitFace(img)
+    pc.splitFace(img) # face
     for rect in regions:
         cropImg = pc.projMap(img, rect)
-        # debug_show(cropImg)
-        pc.splitCardNum(cropImg)
+        pc.splitCardNum(cropImg) # id card number
 
         CropImg, point, width, hight = pc.cropImgByRect(img, rect)
         box = pc.findChineseCharArea(point, width, hight)
@@ -48,12 +42,7 @@ def imgSplit(img):
 
         kernelx = kernely = int(math.ceil((hight / 100.0)))
         kernel_size = (kernelx, kernely)
-        pc.splitChineseChar(chiCharArea, kernel_size)
+        pc.splitChineseChar(chiCharArea, kernel_size) # other area
 
     print("split done !")
     
-
-    ## 
-
-    ## debug
-    # debug_show(th)

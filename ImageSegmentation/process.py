@@ -262,8 +262,6 @@ def splitChineseChar(img, kernel_size):
 
 
 
-
-
 def horizontalProjection(BinaryImg):
     """
     水平投影边界坐标
@@ -416,3 +414,8 @@ def splitFace(img):
     cropImg = img[y:y+h, x:x+w]
     # debug_show(cropImg)
     cv2.imwrite("../temp_images/card_face.jpg", cropImg)
+
+
+
+if __name__ == "__main__":
+    pass
