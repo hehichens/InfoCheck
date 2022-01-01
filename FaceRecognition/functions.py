@@ -67,3 +67,27 @@ def faceRecognition(img, path="../face_images"):
 
     return name
 
+
+def getFace(frame):
+    """
+    get a face image from camera
+    Params:
+        frame: a frame got from camera
+    Return: face image
+    """
+    face_cascade = cv2.CascadeClassifier('../ImageSegmentation/xml/haarcascade_frontalface_default.xml')
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    faces = face_cascade.detectMultiScale(gray, 1.1, 4)
+
+    maxi = 0
+    maxArea = 0
+    for i in range(len(faces)):
+        x, y, w, h = faces[i]
+        area = w*h
+        if area > maxArea:
+            maxi = i
+            maxArea = area
+    
+    x, y, w, h = faces[maxi]
+    faceImg = frame[y:y+h, x:x+w]
+    return faceImg

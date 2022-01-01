@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+
+{% block style %}
+    <link rel="stylesheet"  href="{{url_for('static', filename='css/test.css')}}"/>
+	<link rel="stylesheet"  href="../static/css/sa.jpg"/>
+	<link rel="stylesheet"  href="../static/css/over.png"/>
+
+{% endblock %}
+
+
+
+{% block js %}
+    <script src="{{ url_for('static', filename='js/jquery-3.3.1.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/particle-bg.umd.min.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@1.11.3"></script>
+    <script src="https://cdn.jsdelivr.net/gh/ajlkn/skel@3.0.1/dist/skel.min.js"></script>
+    <script src="{{url_for('static', filename='js/main.js')}}"></script>
+    <script src="{{url_for('static', filename='js/util.js')}}"></script>
+
+    <script>
+        $(function () {
+            $(window).load(function () {
+                NProgress.done();
+            });
+            NProgress.set(0.0);
+            NProgress.configure({showSpinner: false});
+            NProgress.configure({minimum: 0.4});
+            NProgress.configure({easing: 'ease', speed: 1200});
+            NProgress.configure({trickleSpeed: 200});
+            NProgress.configure({trickleRate: 0.2, trickleSpeed: 1200});
+            NProgress.inc();
+            $(window).ready(function () {
+                NProgress.start();
+            });
+        });
+
+            window.addEventListener('load', () => {
+            fetch('https://api.ly522.com/yan.php?format=json', {
+                method: 'GET',
+            }).then((response) => {
+                return response.json();
+            }).then((r) => {
+                insertHitokoto(r);
+            })
+        });
+
+        function insertHitokoto(data) {
+            let hitokoto = document.getElementById('lwlhitokoto');
+            if (data.author || data.source) {
+                hitokoto.innerHTML = `${data.text} —— ${data.author} ${data.source}`;
+            } else {
+                hitokoto.innerHTML = `${data.text}`;
+            }
+        }
+    </script>
+{% endblock %}
+
+{% block content %}
+
+<div id="wrapper">
+    <!--首页开始-->
+    <header id="header">
+{#        <div class="logo">#}
+{#            <span class="icon fa-rocket"></span>#}
+{#        </div>#}
+        <div class="content">
+            <div class="inner">
+                <h1>签到了</h1>
+                <p>签到了，hxd，gkd</p>
+            </div>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#1">简介</a></li>
+                <li><a href="#2">开始</a></li>
+            </ul>
+        </nav>
+
+    </header>
+    <!--首页结束-->
+    <div id="main">
+        <!--标签1开始-->
+        <article id="1">
+            <h2 class="major">简介</h2>
+            <p>这就是个签到系统，没别的。</p>
+        </article>
+        <article id="2">
+            <h2 class="major">选择上传图片或者签到</h2>
+        <div>
+            <form action="/upload_file" method="post" enctype="multipart/form-data">
+                <div style="margin: auto; text-align: center; display: inline-block;">
+                    <label for="file">上传图片</label>
+                    <input type="file" name= "file" />
+                    <input type="submit" value="确认上传"  />
+                </div>
+            </form>
+            <form action="/videoprocess" method="post" enctype="multipart/form-data">
+    　　　      <div style="margin: auto; text-align: center; display: inline-block;">
+                    <input type="submit" value="签到"  />
+                </div>
+            </form>
+        </div>
+        </article>
+    </div>
+    <!-- 版权底部 -->
+    <footer id="footer">
+        <p class="copyright">&copy;2022 SSH&HC</p>
+    </footer>
+    <!-- 版权结束 -->
+</div>
+<!-- BG -->
+<div id="bg"></div>
+
+{% endblock %}
