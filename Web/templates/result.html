@@ -55,13 +55,13 @@
 
     <div>
         <div style="margin: auto; text-align: center;">
-            <h1>结果分析</h1>
+            <h1>结果</h1>
             <p></p><p></p>
             <div style="display:flex; justify-content: flex-end; align-item: flex-start;align-content:center; ">
-                <div style="margin: auto; text-align: center; display: inline-block;">
+                <!-- <div style="margin: auto; text-align: center; display: inline-block;">
                     <h2>检测</h2>
-                    <!-- <img src="{{ url_for('static', filename="images/result.png")}}" style="width: 70%; "> -->
-                </div>
+                    <img src="{{ url_for('static', filename="images/result.png")}}" style="width: 70%; ">
+                </div> -->
 
                 <table frame="void" style=" width: 25%" align="center">
                     {% for n, d in data.items() %}
@@ -73,13 +73,6 @@
                    {% endfor %}
                 </table>
 
-            </div>
-            <div style="border: 2px solid ; border-radius: 25px; width: 46%;margin:auto;text-align: center;padding-top: 1%">
-                {% if Result[1] == 0 %}
-                    <h2>{{ Result[0] }}</h2>
-                {% else %}
-                    <h2 style="color: #f5840b">{{ Result[0] }}</h2>
-                {% endif %}
             </div>
         </div>
     </div>

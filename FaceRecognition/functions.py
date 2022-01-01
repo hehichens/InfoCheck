@@ -38,6 +38,8 @@ def setFaceEncoding(path):
         total_face_encoding.append(
             face_recognition.face_encodings(
                 face_recognition.load_image_file(path + "/" + fn))[0])
+        img = face_recognition.load_image_file(path + "/" + fn)
+        print(type(img), img.shape)
 
     return total_face_encoding
 
@@ -68,7 +70,7 @@ def faceRecognition(img, path="../face_images"):
     return name
 
 
-def getFace(frame):
+def getFace(frame, debug=False):
     """
     get a face image from camera
     Params:
@@ -89,5 +91,18 @@ def getFace(frame):
             maxArea = area
     
     x, y, w, h = faces[maxi]
+
+    ## bigger image of face
+    flex_x = 0.1
+    flex_y = 0.4
+    x -= int(flex_x*w)
+    y -= int(flex_y*y)
+    w += int(flex_x*w)
+    h += int(flex_y*h)
     faceImg = frame[y:y+h, x:x+w]
+
+    ## debug
+    if debug:
+        return faceImg, x, y, w, h
+
     return faceImg

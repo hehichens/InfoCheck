@@ -3,14 +3,18 @@ this is a web interface
 eidt by hichens
 """
 
+import face_recognition
 from flask import Response
 from flask import Flask, request, redirect, url_for
 from flask import render_template
 import datetime
 import cv2
-import sys; sys.path.append("../")
 import os
 import sqlite3 as sq
+import numpy as np
+import time
+
+import sys; sys.path.append("../")
 from FaceRecognition import functions as fc
 import OCR.baiduOcr as ocr
 import threading
@@ -18,7 +22,7 @@ from werkzeug.utils import secure_filename
 
 capFlag = False
 lock = threading.Lock()
-
+start = None
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = datetime.timedelta(seconds=1) # file refresh time
 app.config['MAX_CONTENT_LENGTH'] = 160 * 1024 * 1024 # maximum file  <= 160MB
@@ -29,6 +33,7 @@ dataBaseDir = os.path.join(baseDir, 'DataBase')
 """global paramters"""
 faceImg = None
 outputFrame = None
+name=None
 ALLOWED_EXTENSIONS = set(['jpg', 'png'])
 
 @app.route("/index")
@@ -42,21 +47,88 @@ def index():
 
 @app.route("/main")
 def main():
-    global capFlag 
+    global capFlag, faceImg, name, outputFrame
     capFlag = True
-    if faceImg == None:
-        return render_template("main.html")
-    else:
+    name = faceMatch(outputFrame)
+    print(name)
+    if name is not None:
         return redirect(url_for('result'))
+    else:
+        faceImg = None
+    return render_template("main.html")
 
 @app.route("/result")
 def result():
-    global faceImg, capFlag
+    global faceImg, capFlag, name
     capFlag = False
-    name = fc.faceRecognition(faceImg)
-    data = []
-    Result = []
-    return render_template("result.html", data=data, Result=Result)
+    data = getData(name)
+    return render_template("result.html", data=data,)
+
+
+def faceMatch(faceImg):
+    """
+    Params:
+        faceImg: a face image
+    return
+        name: the name of the image
+    """
+    global name
+    ##step 1 load all the name from data.sqlite
+    conn = sq.connect('data.sqlite')
+    cursor = conn.cursor()
+    sqText = "select * from user;"
+    data = cursor.execute(sqText)
+    
+
+    ## step2 create name and image list
+    total_face_encoding = []
+    total_image_name = []
+    for raw in data:
+        
+        total_image_name.append(raw[1])
+        img = np.frombuffer(raw[6], dtype=np.uint8)
+        height, width = raw[7], raw[8]
+        img = img.reshape(height, width, 3)
+        total_face_encoding.append(
+            face_recognition.face_encodings(img)[0]
+        )
+
+    ## step3 match the image and return it's name
+    face_locations = face_recognition.face_locations(img)
+    face_encodings = face_recognition.face_encodings(img, face_locations)
+    face_encoding = face_encodings[0]
+    for i, v in enumerate(total_face_encoding):
+        match = face_recognition.compare_faces(
+                [v], face_encoding, tolerance=0.1)
+        
+        if match[0]:
+            name = total_image_name[i]
+
+    conn.close()
+    return name
+    
+def getData(name):
+    """
+    load all the name from data.sqlite
+    Params:
+        name: a name of a face image got from camera and searched in the database
+    Return:
+        data: the whole data searched by the name int the database
+    """
+    conn = sq.connect('data.sqlite')
+    cursor = conn.cursor()
+    sqText = "select * from user where name=?;"
+    col_names = ['身份证号码', '姓名', '性别', '民族', '生日', '住址']
+    data_dict = {}
+    try:
+        data = cursor.execute(sqText, (name, )).fetchall()[0]
+        for i in range(6):
+            data_dict[col_names[i]] = data[i]
+    except:
+        pass
+    conn.close()
+    return data_dict
+
 
 # @app.route("/PorcessError")
 # def ProcessError():
@@ -77,13 +149,25 @@ def detect():
                 width = scale_percent
                 height = scale_percent * frame.shape[0] // frame.shape[1]
                 frame = cv2.resize(frame, (width, height))
-                """get the face image"""
+                """get the face image from camera"""
                 outputFrame = frame.copy()
-                if faceImg == None:
-                    try:
-                        faceImg = fc.getFace(frame)
-                    except:
-                        pass
+
+                ##debug
+                # try:
+                #     faceImg, x, y, w, h = fc.getFace(frame, debug=True)
+                #     name = faceMatch(frame)
+                #     cv2.rectangle(outputFrame, (x, y), (x+w, y+h), (0, 0, 255), 2)
+                #     font = cv2.FONT_HERSHEY_DUPLEX
+                #     if name == '贺琛':
+                #         name = 'hichens'
+                #     else:
+                #         name = 'others'
+
+                #     cv2.putText(outputFrame, name, (x, y), font, 1.0,
+                #         (255, 255, 255), 1)
+                #     print(name)
+                # except:
+                #     pass
 
 
 def generate():
@@ -124,6 +208,7 @@ def upload_file():
 
             ## step2 ocr process get the information of image
             text_data = ocr.ocrFully(savePath)
+            print(text_data)
 
             ## step3 crop the face image
             faceImg = fc.getFace(cardImg)
