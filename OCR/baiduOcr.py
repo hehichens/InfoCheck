@@ -69,19 +69,12 @@ def ocrFully(img_path='../images/w1.jpg'):
         elif i == 5 and data[0] == '公' and data[1] == '民':
             text_data.append(data[6:])
     
-    ## ocr process error
-    if(len(text_data) != 6):
-        return ""
-    else:
-        # col_names = ['姓名', '性别', '民族', '出生', '住址', '公民身份证号码']
-        # text_dict = {}
-        # for i, col in enumerate(col_names):
-        #     text_dict[col] = text_data[i]
-        return text_data
+    # ocr process error
+    return text_data
 
 
 
 if __name__ == "__main__":
-    text = ocrFully("../images/w1.jpg")
+    text = ocrFully("../images/ssh.jpg")
     for s in text:
         print(s)

@@ -93,12 +93,12 @@ def getFace(frame, debug=False):
     x, y, w, h = faces[maxi]
 
     ## bigger image of face
-    flex_x = 0.1
-    flex_y = 0.4
-    x -= int(flex_x*w)
-    y -= int(flex_y*y)
-    w += int(flex_x*w)
-    h += int(flex_y*h)
+    # flex_x = 0.1
+    # flex_y = 0.4
+    # x -= int(flex_x*w)
+    # y -= int(flex_y*y)
+    # w += int(flex_x*w)
+    # h += int(flex_y*h)
     faceImg = frame[y:y+h, x:x+w]
 
     ## debug

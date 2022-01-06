@@ -58,10 +58,10 @@
             <h1>结果</h1>
             <p></p><p></p>
             <div style="display:flex; justify-content: flex-end; align-item: flex-start;align-content:center; ">
-                <!-- <div style="margin: auto; text-align: center; display: inline-block;">
-                    <h2>检测</h2>
-                    <img src="{{ url_for('static', filename="images/result.png")}}" style="width: 70%; ">
-                </div> -->
+                <div style="margin: auto; text-align: center; display: inline-block;">
+                    <h2>人脸</h2>
+                    <img src="{{ url_for('static', filename="images/face.jpg")}}" style="width: 70%; ">
+                </div>
 
                 <table frame="void" style=" width: 25%" align="center">
                     {% for n, d in data.items() %}

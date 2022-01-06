@@ -248,7 +248,7 @@ def splitChineseChar(img, kernel_size):
         up, down = boundaryCoor
         box = np.int0([[coors[0][0], up], [coors[-1][1], up], [coors[-1][1], down], [coors[0][0], down]])
         cropImg, _, _, _  = cropImgByBox(img, box)
-        # debug_show(cropImg)
+        debug_show(cropImg)
         if i == 0:
             cv2.imwrite("../temp_images/card_name.jpg", cropImg)
         elif i == 1:

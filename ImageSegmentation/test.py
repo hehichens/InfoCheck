@@ -8,7 +8,7 @@ from split import imgSplit
 
 
 if __name__ == "__main__":
-    img_path = "../images/ssh.jpg"
+    img_path = "../images/w1.jpg"
     img = cv2.imread(img_path)
 
     ## detect

@@ -37,5 +37,16 @@ the example of insert data:
 
 
 
-## 3. 
+## 3. 原理
 
+### 3.1 图像分割
+
+<img src=".\pics\5.png" style="zoom:80%;" />
+
+### 3.2 OCR
+
+<img src=".\pics\4.png" style="zoom:80%;" />
+
+### 3.3 人脸检测
+
+<img src=".\pics\3.png" style="zoom:80%;" />

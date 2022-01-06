@@ -34,11 +34,12 @@ def imgSplit(img):
     for rect in regions:
         cropImg = pc.projMap(img, rect)
         pc.splitCardNum(cropImg) # id card number
+        pc.debug_show(cropImg)
 
         CropImg, point, width, hight = pc.cropImgByRect(img, rect)
         box = pc.findChineseCharArea(point, width, hight)
         chiCharArea, point, width, hight = pc.cropImgByBox(img, box)
-        # pc.debug_show(chiCharArea)
+        pc.debug_show(chiCharArea)
 
         kernelx = kernely = int(math.ceil((hight / 100.0)))
         kernel_size = (kernelx, kernely)
