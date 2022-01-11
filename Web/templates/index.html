@@ -67,8 +67,8 @@
 {#        </div>#}
         <div class="content">
             <div class="inner">
-                <h1>签到了</h1>
-                <p>签到了，hxd，gkd</p>
+                <h1>人证匹配</h1>
+                <p>人脸与证件信息配对</p>
             </div>
         </div>
         <nav>
@@ -84,21 +84,25 @@
         <!--标签1开始-->
         <article id="1">
             <h2 class="major">简介</h2>
-            <p>这就是个签到系统，没别的。</p>
+            <p>人证匹配系统，根据人脸返回个人信息。</p>
         </article>
         <article id="2">
-            <h2 class="major">选择上传图片或者签到</h2>
+            <h2 class="major">选择上传图片或者点击开始</h2>
         <div>
             <form action="/upload_file" method="post" enctype="multipart/form-data">
                 <div style="margin: auto; text-align: center; display: inline-block;">
                     <label for="file">上传图片</label>
-                    <input type="file" name= "file" />
-                    <input type="submit" value="确认上传"/>
+                    <div>
+                        <input type="file" name= "file" />
+                    </div>
+                    <div>
+                        <input type="submit" value="确认上传"/>
+                    </div>
                 </div>
             </form>
             <form action="/videoprocess" method="post" enctype="multipart/form-data">
     　　　      <div style="margin: auto; text-align: center; display: inline-block;">
-                    <input type="submit" value="签到"  />
+                    <input type="submit" value="检测"  />
                 </div>
             </form>
         </div>

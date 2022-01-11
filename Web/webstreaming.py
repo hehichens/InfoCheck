@@ -37,8 +37,10 @@ ALLOWED_EXTENSIONS = set(['jpg', 'png'])
 total_face_encoding = []
 total_image_name = []
 
-## connetc to sqlite
 def connetDB():
+    """
+    connetc to sqlite
+    """
     conn = sq.connect('data.sqlite')
     cursor = conn.cursor()
     sqText = "select * from user;"
@@ -53,6 +55,9 @@ def connetDB():
 
 
 def refreshDB():
+    """
+    Refresh Database
+    """
     total_face_encoding = []
     total_image_name = []
     conn = sq.connect('data.sqlite')
