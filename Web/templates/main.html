@@ -9,7 +9,7 @@
                 centerY = canvas.height/2,  //Canvas中心点y轴坐标
                 rad = Math.PI * 2 / 100, //将360度分成100份，那么每一份就是rad度
                 speed = 0, //加载的快慢就靠它了
-                cnt = 3;
+                cnt = 6;
 
             //绘制外圈
             function blueCircle(n){
@@ -47,6 +47,7 @@
                 if (cnt > 0) {
                     document.getElementById("demo").innerHTML = "<strong>正在生成结果哦，还有 <font color=red>" + cnt + "</font> 秒后跳转~~~</strong>";
                     cnt--;
+                    // alert(cnt)
                     window.setTimeout(countTime, 1000);
                 } else {
                     cnt = 10;
@@ -56,22 +57,23 @@
             function run() {
                 window.clearTimeout()
                 window.setTimeout(run, 400);
-                speed = 0.01 + speed;
+                speed = 0.05 + speed;
 
             }
             //动画循环
-            (function drawFrame(){
-                 if(speed > 100) {
-                     countTime();
-                     return;
-                 }
-                window.requestAnimationFrame(drawFrame, canvas);
-                context.clearRect(0, 0, canvas.width, canvas.height);
-                whiteCircle();
-                text(speed);
-                blueCircle(speed);
-                run();
-            }());
+            // (function drawFrame(){
+            //      if(speed > 100) {
+            //          countTime();
+            //          return;
+            //      }
+            //     window.requestAnimationFrame(drawFrame, canvas);
+            //     context.clearRect(0, 0, canvas.width, canvas.height);
+            //     whiteCircle();
+            //     text(speed);
+            //     blueCircle(speed);
+            //     run();
+            // }
+            (countTime());
         }
     </script>
 {% endblock %}
@@ -104,8 +106,18 @@
 
     <div id="main">
         <h1>检测中...</h1>
-        <img src="{{ url_for('video_feed') }}" style="height:400px%; width: 40%" />
-        <button><a href="result">查看结果</a></button>
-        <button><a href="index#2">返回</a></button>
+        <img src="{{ url_for('video_feed') }}" style="height:40%; width: 40%" />
+        
+        <div style="text-align:center">
+            <canvas id="canvas" width="0" height="0" ></canvas>
+        </div>
+        <p id="demo"></p>
+        <nav>
+            <ul>
+                <li><button><a href="{{ url_for('index') }}">返回</a></button></li>
+                <li><button><a href="{{ url_for('result') }}">  查看结果  </a></button></li>
+            </ul>
+        </nav>
+        <p id="demo"></p>
     </div>
 {% endblock %}

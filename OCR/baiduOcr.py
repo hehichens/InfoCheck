@@ -52,6 +52,7 @@ def ocrFully(img_path='../images/w1.jpg'):
     except:
         pass
 
+
     # text_data = return_data
     for i, data in enumerate(return_data):
         data = data['words']
@@ -75,6 +76,6 @@ def ocrFully(img_path='../images/w1.jpg'):
 
 
 if __name__ == "__main__":
-    text = ocrFully("../images/ssh.jpg")
+    text = ocrFully("../images/wyk.jpg")
     for s in text:
         print(s)

@@ -37,27 +37,32 @@ ALLOWED_EXTENSIONS = set(['jpg', 'png'])
 total_face_encoding = []
 total_image_name = []
 
-def connetDB():
+def connectDB():
     """
     connetc to sqlite
     """
     conn = sq.connect('data.sqlite')
     cursor = conn.cursor()
     sqText = "select * from user;"
-    data = cursor.execute(sqText)
-    for raw in data:
-        total_image_name.append(raw[1])
-        img = np.frombuffer(raw[6], dtype=np.uint8)
-        height, width = raw[7], raw[8]
-        img = img.reshape(height, width, 3)
-        total_face_encoding.append(
-            face_recognition.face_encodings(img)[0])
+    try:
+        data = cursor.execute(sqText)
+        for raw in data:
+            total_image_name.append(raw[1])
+            img = np.frombuffer(raw[6], dtype=np.uint8)
+            height, width = raw[7], raw[8]
+            img = img.reshape(height, width, 3)
+            total_face_encoding.append(
+                face_recognition.face_encodings(img)[0])
+    except:
+        pass
 
 
 def refreshDB():
     """
     Refresh Database
     """
+    global total_face_encoding
+    global total_image_name
     total_face_encoding = []
     total_image_name = []
     conn = sq.connect('data.sqlite')
@@ -101,24 +106,30 @@ def result():
     global capFlag, name
     capFlag = False
     data = getData(name)
+    if len(data) == 0:
+        return redirect(url_for('ProcessError'))
+    
     return render_template("result.html", data=data)
 
 
 def faceMatch(frame):
+    global total_face_encoding
+    global total_image_name
     face_locations = face_recognition.face_locations(frame)
     face_encodings = face_recognition.face_encodings(frame, face_locations)
 
     top, right, bottom, left = face_locations[0]
     face_encoding = face_encodings[0]
 
-    # 看看面部是否与已知人脸相匹配。
+    # 看看面部是否与已知人脸相匹配
+    print(total_image_name)
     for i, v in enumerate(total_face_encoding):
         match = face_recognition.compare_faces(
-            [v], face_encoding, tolerance=0.5)
+            [v], face_encoding, tolerance=0.4)
         name = "Unknown"
         if match[0]:
             name = total_image_name[i]
-            print(name)
+            # print(name)
             break
 
     return name
@@ -171,6 +182,11 @@ def saveFaceImg(name):
 @app.route("/PorcessError")
 def ProcessError():
     return render_template("ProcessError.html")
+
+@app.route("/uploadError")
+def uploadError():
+    return render_template("uploadError.html")
+
 
 @app.route("/detect")
 def detect():
@@ -245,7 +261,7 @@ def upload_file():
                 text_data = ocr.ocrFully(savePath)
                 print(text_data)
             except:
-                print("身份证识别有误， 请重新上传！")
+                return redirect(url_for('uploadError'))
 
             ## step3 crop the face image
             faceImg = fc.getFace(cardImg)
@@ -316,6 +332,6 @@ def allowed_file(filename):
 
 
 if __name__ == '__main__':
-    connetDB()
+    connectDB()
     app.run(host='127.0.0.1', port=8000, debug=False,
             threaded=True, use_reloader=False)

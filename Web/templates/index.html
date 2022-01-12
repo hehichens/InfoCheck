@@ -90,18 +90,15 @@
             <h2 class="major">选择上传图片或者点击开始</h2>
         <div>
             <form action="/upload_file" method="post" enctype="multipart/form-data">
-                <div style="margin: auto; text-align: center; display: inline-block;">
+                <div style="margin: auto; text-align: left; display: inline-block;">
                     <label for="file">上传图片</label>
-                    <div>
-                        <input type="file" name= "file" />
-                    </div>
-                    <div>
-                        <input type="submit" value="确认上传"/>
-                    </div>
+                    <div style="display:inline;"><input type="file" name= "file" /></div>
+                    <p></p>
+                    <div style="display:inline;"><input type="submit" value="确认上传"/></div>
                 </div>
             </form>
-            <form action="/videoprocess" method="post" enctype="multipart/form-data">
-    　　　      <div style="margin: auto; text-align: center; display: inline-block;">
+            <form action="/videoprocess" method="post" enctype="multipart/form-data" style="text-align: right;">
+    　　　      <div style="margin: auto; text-align: right; display: inline-block;">
                     <input type="submit" value="检测"  />
                 </div>
             </form>
